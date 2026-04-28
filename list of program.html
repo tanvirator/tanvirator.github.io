@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>NSSS Portal — Programme List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #F2F5F9;
+            font-family: -apple-system, 'Inter', system-ui, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        /* MODERN MOBILE PHONE VIEWPORT */
+        .mobile-app {
+            max-width: 380px;
+            width: 100%;
+            height: 700px;
+            background: #FFFFFF;
+            border-radius: 44px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 8px #E8ECF0, 0 0 0 12px #D0D6DD;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* status bar */
+        .status-bar {
+            background: #FFFFFF;
+            padding: 14px 24px 6px 24px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 590;
+            color: #1C2E3A;
+            border-bottom: 0.5px solid #EEF2F8;
+        }
+
+        /* main scrollable content */
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px 12px 16px;
+            scroll-behavior: smooth;
+        }
+
+        .app-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .app-content::-webkit-scrollbar-track {
+            background: #F0F2F6;
+            border-radius: 10px;
+        }
+        .app-content::-webkit-scrollbar-thumb {
+            background: #C0CCD6;
+            border-radius: 10px;
+        }
+
+        /* YEAR FILTER — TOP LEFT */
+        .filter-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .year-pill {
+            background: #F0F4F9;
+            border-radius: 40px;
+            padding: 4px 6px 4px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 0.5px solid #E6EDF3;
+        }
+        .year-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #3E6B7E;
+            background: #FFFFFFB3;
+            padding: 4px 10px;
+            border-radius: 30px;
+        }
+        .year-select {
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #0C4A5E;
+            font-family: inherit;
+            padding: 8px 4px;
+            cursor: pointer;
+            outline: none;
+        }
+        .badge-date {
+            font-size: 0.7rem;
+            background: #EAF1F5;
+            padding: 5px 12px;
+            border-radius: 40px;
+            color: #2D6E84;
+            font-weight: 500;
+        }
+
+        /* section title */
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0A3D4F;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .programme-count {
+            background: #E9F0F5;
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 500;
+            color: #2D6E84;
+        }
+
+        /* programme table / list - card style for modern mobile */
+        .programme-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .programme-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 14px 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #EDF2F7;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .programme-card:active {
+            transform: scale(0.99);
+            background: #FCFDFF;
+        }
+        /* row header: SL + programme name */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .sl-badge {
+            background: #EFF3F9;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #2C6B80;
+        }
+        .prog-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #103F50;
+            flex: 1;
+            line-height: 1.3;
+        }
+        .ministry {
+            font-size: 0.7rem;
+            color: #6F8FA0;
+            background: #F5F9FC;
+            padding: 6px 10px;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .stat-item {
+            flex: 1;
+            background: #F8FBFE;
+            padding: 8px 8px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        .stat-label {
+            font-size: 0.6rem;
+            font-weight: 500;
+            color: #7B99AA;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .stat-value {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #1B6A81;
+            margin-top: 4px;
+        }
+
+        /* context message */
+        .context-message {
+            background: #EFF7FA;
+            border-radius: 24px;
+            padding: 12px 16px;
+            margin: 8px 0 18px 0;
+            font-size: 0.75rem;
+            color: #1C6B82;
+            border-left: 3px solid #2C9BB3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .msg-emoji {
+            font-size: 1.2rem;
+        }
+        .msg-text {
+            flex: 1;
+            font-weight: 470;
+            line-height: 1.35;
+        }
+
+        /* BOTTOM DOCK */
+        .bottom-dock {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            border-top: 0.5px solid #EFF3F8;
+            padding: 10px 16px 20px 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.02);
+        }
+        .nav-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0 4px;
+            border-radius: 32px;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.7rem;
+            color: #7C98A9;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .nav-btn span:first-child {
+            font-size: 1.4rem;
+            font-weight: 400;
+        }
+        .nav-btn.active {
+            color: #197786;
+            background: #EAF3F7;
+        }
+        .nav-btn.active span:first-child {
+            transform: scale(1.02);
+        }
+        .nav-btn:active {
+            transform: scale(0.94);
+        }
+        .safe-bottom {
+            height: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile-app">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span>📶 🔋 100%</span>
+    </div>
+
+    <div class="app-content">
+        <!-- YEAR FILTER (top left) -->
+        <div class="filter-row">
+            <div class="year-pill">
+                <span class="year-label">📅 Fiscal Year</span>
+                <select id="yearFilterList" class="year-select">
+                    <option value="2023">FY 2023–24</option>
+                    <option value="2024" selected>FY 2024–25</option>
+                    <option value="2025">FY 2025–26</option>
+                    <option value="2026">FY 2026–27</option>
+                </select>
+            </div>
+            <div class="badge-date">Programme Explorer</div>
+        </div>
+
+        <!-- title + dynamic count -->
+        <div class="section-title">
+            📋 Social Protection Programmes
+            <span class="programme-count" id="programmeCountBadge">0 items</span>
+        </div>
+
+        <!-- dynamic programme list container -->
+        <div id="programmeListContainer" class="programme-list">
+            <!-- JS will inject cards here -->
+        </div>
+
+        <!-- contextual message (shows active bottom tab) -->
+        <div class="context-message" id="contextMsgScreen2">
+            <div class="msg-emoji">📋</div>
+            <div class="msg-text" id="dynamicMsgText2">Programme list · Select a programme to view details</div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION (same 4 buttons) -->
+    <div class="bottom-dock">
+        <button class="nav-btn" data-mobile-nav="home">
+            <span>🏠</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="nsss">
+            <span>📘</span>
+            <span>NSSS Plan</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="lifecycle">
+            <span>🔄</span>
+            <span>Life Cycle</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="faq">
+            <span>❓</span>
+            <span>FAQ</span>
+        </button>
+    </div>
+    <div class="safe-bottom"></div>
+</div>
+
+<script>
+    // =====================================================
+    // MOCK DATASET FOR PROGRAMMES (with real names, ministries, beneficiaries in lakh, budget in crore Taka)
+    // represents "SL.", "Social Protection Programme Name", "Ministry/Division", "Beneficiary (Lakh)", "Budget (Crore Taka)"
+    // Data changes slightly based on year filter (growth simulation)
+    // =====================================================
+    
+    const baseProgrammes = [
+        { id: 1, name: "Old Age Allowance Scheme", ministry: "Ministry of Social Welfare", baseBeneficiaryLakh: 48.5, baseBudgetCrore: 1250 },
+        { id: 2, name: "Widow & Destitute Women Support", ministry: "Ministry of Women & Children Affairs", baseBeneficiaryLakh: 32.2, baseBudgetCrore: 890 },
+        { id: 3, name: "Disability Allowance Programme", ministry: "Ministry of Social Welfare", baseBeneficiaryLakh: 18.7, baseBudgetCrore: 540 },
+        { id: 4, name: "Maternity Allowance Scheme", ministry: "Ministry of Health & Family Welfare", baseBeneficiaryLakh: 27.4, baseBudgetCrore: 720 },
+        { id: 5, name: "Vulnerable Group Development (VGD)", ministry: "Ministry of Women & Children Affairs", baseBeneficiaryLakh: 41.3, baseBudgetCrore: 1120 },
+        { id: 6, name: "Employment Generation Program", ministry: "Ministry of Labour & Employment", baseBeneficiaryLakh: 22.8, baseBudgetCrore: 635 },
+        { id: 7, name: "School Stipend for Poor Students", ministry: "Ministry of Primary & Mass Education", baseBeneficiaryLakh: 56.0, baseBudgetCrore: 1480 },
+        { id: 8, name: "Honorarium for insolvent Freedom Fighters", ministry: "Ministry of Liberation War Affairs", baseBeneficiaryLakh: 9.5, baseBudgetCrore: 310 },
+        { id: 9, name: "Urban Poverty Alleviation Fund", ministry: "Ministry of Local Government", baseBeneficiaryLakh: 15.3, baseBudgetCrore: 590 },
+        { id: 10, name: "Tea Garden Workers Support", ministry: "Ministry of Labour", baseBeneficiaryLakh: 6.8, baseBudgetCrore: 245 }
+    ];
+    
+    // year multiplier: adjust beneficiaries & budget based on fiscal year growth
+    function getMultiplier(year) {
+        if (year === 2023) return 0.92;
+        if (year === 2024) return 1.0;
+        if (year === 2025) return 1.12;
+        if (year === 2026) return 1.24;
+        return 1.0;
+    }
+    
+    // generate programme list based on selected year
+    function generateProgrammes(year) {
+        const multiplier = getMultiplier(year);
+        return baseProgrammes.map(prog => ({
+            ...prog,
+            beneficiaryLakh: +(prog.baseBeneficiaryLakh * multiplier).toFixed(1),
+            budgetCrore: Math.round(prog.baseBudgetCrore * multiplier)
+        }));
+    }
+    
+    // render programme cards with columns:
+    // SL. , Social Protection Programme Name, Ministry/Division, Beneficiary (Lakh), Budget (Crore Taka)
+    function renderProgrammeList(year) {
+        const programmes = generateProgrammes(year);
+        const container = document.getElementById('programmeListContainer');
+        if (!container) return;
+        
+        // update badge count
+        const countBadge = document.getElementById('programmeCountBadge');
+        if (countBadge) countBadge.innerText = `${programmes.length} programmes`;
+        
+        let html = '';
+        programmes.forEach((prog, idx) => {
+            const sl = idx + 1;
+            html += `
+                <div class="programme-card" data-prog-id="${prog.id}">
+                    <div class="card-header">
+                        <span class="sl-badge">SL ${sl}</span>
+                        <span class="prog-name">${escapeHtml(prog.name)}</span>
+                    </div>
+                    <div class="ministry">🏛️ ${escapeHtml(prog.ministry)}</div>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-label">Beneficiary (Lakh)</div>
+                            <div class="stat-value">${prog.beneficiaryLakh.toLocaleString('en-IN')} L</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Budget (Crore Tk)</div>
+                            <div class="stat-value">৳ ${prog.budgetCrore.toLocaleString('en-IN')} Cr</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        
+        // attach click handler that navigates to the programme detail page
+        const cards = document.querySelectorAll('.programme-card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const programmeId = card.getAttribute('data-prog-id');
+                if (programmeId) {
+                    window.location.href = `programme detail.html?id=${programmeId}`;
+                }
+            });
+        });
+    }
+    
+    // simple XSS helper
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // ----- Bottom navigation state & contextual message (same as first screen logic)-----
+    let currentActiveNav = 'home';   // home, nsss, lifecycle, faq, but on this screen default "home" shows programme list context
+    const yearSelectElem = document.getElementById('yearFilterList');
+    let currentYear = '2024';
+    
+    function updateContextMessageForActiveTab(tabId, year) {
+        const msgDiv = document.getElementById('dynamicMsgText2');
+        const emojiSpan = document.querySelector('#contextMsgScreen2 .msg-emoji');
+        const yearNum = parseInt(year,10);
+        const nextYear = yearNum+1;
+        if (!msgDiv) return;
+        
+        let message = '';
+        let emoji = '📋';
+        switch(tabId) {
+            case 'home':
+                emoji = '🏠';
+                message = `Home · Programme list (FY ${year}–${nextYear}). ${generateProgrammes(year).length} active social protection schemes. Use filter by year to update budget/beneficiary data.`;
+                break;
+            case 'nsss':
+                emoji = '📘';
+                message = `NSSS Action Plan · Aligned with programme list FY ${year}–${nextYear}. Priority: universal pension, disability inclusion, 37% increased allocation for old age benefits.`;
+                break;
+            case 'lifecycle':
+                emoji = '🔄';
+                message = `Life Cycle Approach · Programmes mapping: early childhood (stipend, maternity), working-age (employment), elderly (allowance). ${generateProgrammes(year).length} schemes covering full lifecycle.`;
+                break;
+            case 'faq':
+                emoji = '❓';
+                message = `FAQ — How are programmes selected? Based on NSSS strategic framework. Budget figures from Ministry of Finance. Beneficiary data updated quarterly.`;
+                break;
+            default:
+                message = `Programme list · FY ${year}–${nextYear}. Filter by year to see changes.`;
+        }
+        msgDiv.innerHTML = message;
+        if (emojiSpan) emojiSpan.innerText = emoji;
+    }
+    
+    function setActiveBottomNav(tabId, selectedYear) {
+        currentActiveNav = tabId;
+        // update active style on buttons
+        const allBtns = document.querySelectorAll('.nav-btn');
+        allBtns.forEach(btn => {
+            const btnVal = btn.getAttribute('data-mobile-nav');
+            if (btnVal === tabId) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        updateContextMessageForActiveTab(tabId, selectedYear);
+    }
+    
+    // attach navigation event listeners
+    function attachNavForListScreen() {
+        const btns = document.querySelectorAll('.nav-btn');
+        const getCurrentYear = () => document.getElementById('yearFilterList')?.value || '2024';
+        btns.forEach(btn => {
+            btn.removeEventListener('click', (btn._listenerListNav));
+            const handler = function(e) {
+                const navValue = btn.getAttribute('data-mobile-nav');
+                if (navValue) {
+                    if (navValue === 'home') {
+                        window.location.href = 'home.html';
+                    } else if (navValue === 'nsss') {
+                        window.location.href = 'nsss plan.html';
+                    } else if (navValue === 'lifecycle') {
+                        window.location.href = 'life cycle.html';
+                    } else if (navValue === 'faq') {
+                        window.location.href = 'faq.html';
+                    } else {
+                        const yearNow = getCurrentYear();
+                        setActiveBottomNav(navValue, yearNow);
+                    }
+                    // add haptic effect
+                    btn.style.transform = 'scale(0.96)';
+                    setTimeout(() => { btn.style.transform = ''; }, 120);
+                }
+            };
+            btn.addEventListener('click', handler);
+            btn._listenerListNav = handler;
+        });
+    }
+    
+    // handle year filter update: re-render programmes + update contextual message based on current active tab
+    function onYearChange() {
+        const newYear = yearSelectElem.value;
+        currentYear = newYear;
+        renderProgrammeList(parseInt(newYear,10));
+        // important: after re-render, refresh context message to reflect new year
+        updateContextMessageForActiveTab(currentActiveNav, newYear);
+    }
+    
+    // initial load and set default active tab = home, but also sync stats
+    function initListScreen() {
+        if (yearSelectElem) {
+            currentYear = yearSelectElem.value;
+            renderProgrammeList(parseInt(currentYear,10));
+            yearSelectElem.addEventListener('change', onYearChange);
+        }
+        // set default active navigation to 'home' (programmes list context)
+        setActiveBottomNav('home', currentYear);
+        attachNavForListScreen();
+        
+        // additional hover: ensure bottom nav matches style, also make footer consistent
+        const currentYearForMsg = yearSelectElem?.value || '2024';
+        updateContextMessageForActiveTab('home', currentYearForMsg);
+        
+        // provide a tooltip simulation
+        const nsssBtn = document.querySelector('.nav-btn[data-mobile-nav="nsss"]');
+        if (nsssBtn) nsssBtn.setAttribute('title', 'NSSS Action Plan - full framework');
+    }
+    
+    initListScreen();
+    
+    // manual fix for dynamic SL ordering
+    window.addEventListener('load', () => {
+        // final style patch to ensure stat rows look neat.
+        const style = document.createElement('style');
+        style.textContent = `
+            .programme-card {
+                transition: all 0.2s;
+            }
+            .stat-value {
+                word-break: break-word;
+            }
+        `;
+        document.head.appendChild(style);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>NSSS Portal — NSSS Action Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background: #F2F5F9;
+            font-family: -apple-system, 'Inter', system-ui, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 12px;
+        }
+        .mobile-app {
+            max-width: 380px;
+            width: 100%;
+            height: 700px;
+            background: #FFFFFF;
+            border-radius: 44px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 8px #E8ECF0, 0 0 0 12px #D0D6DD;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .status-bar {
+            background: #FFFFFF;
+            padding: 14px 24px 6px 24px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 590;
+            color: #1C2E3A;
+            border-bottom: 0.5px solid #EEF2F8;
+        }
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 20px 12px 20px;
+            scroll-behavior: smooth;
+        }
+        .app-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .app-content::-webkit-scrollbar-track {
+            background: #F0F2F6;
+            border-radius: 10px;
+        }
+        .app-content::-webkit-scrollbar-thumb {
+            background: #C0CCD6;
+            border-radius: 10px;
+        }
+        .filter-row {
+            display: flex;
+            justify-content: flex-start;
+            align-items: baseline;
+            gap: 20px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .year-pill {
+            background: #F0F4F9;
+            border-radius: 40px;
+            padding: 4px 6px 4px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 0.5px solid #E6EDF3;
+        }
+        .year-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #3E6B7E;
+            background: #FFFFFFB3;
+            padding: 4px 10px;
+            border-radius: 30px;
+        }
+        .year-select {
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #0C4A5E;
+            font-family: inherit;
+            padding: 8px 4px;
+            cursor: pointer;
+            outline: none;
+        }
+        .right-filters {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+        .stat-card {
+            background: #FFFFFF;
+            border-radius: 28px;
+            padding: 1rem 0.9rem;
+            box-shadow: 0 6px 14px rgba(0, 25, 35, 0.05), 0 1px 2px rgba(0,0,0,0.02);
+            border: 1px solid #ECF2F7;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .stat-card:active {
+            transform: scale(0.98);
+        }
+        .stat-icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .stat-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6E8C9E;
+            margin-bottom: 8px;
+        }
+        .stat-number {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #124C63;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            word-break: break-word;
+            letter-spacing: -0.3px;
+        }
+        .stat-sub {
+            font-size: 0.65rem;
+            color: #8EA9B9;
+            font-weight: 500;
+        }
+        .context-message {
+            background: #EFF7FA;
+            border-radius: 24px;
+            padding: 12px 16px;
+            margin: 12px 0 20px 0;
+            font-size: 0.75rem;
+            color: #1C6B82;
+            border-left: 3px solid #2C9BB3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(2px);
+        }
+        .msg-emoji {
+            font-size: 1.2rem;
+        }
+        .msg-text {
+            flex: 1;
+            font-weight: 470;
+            line-height: 1.35;
+        }
+        .bottom-dock {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            border-top: 0.5px solid #EFF3F8;
+            padding: 10px 16px 20px 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.02);
+        }
+        .nav-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0 4px;
+            border-radius: 32px;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.7rem;
+            color: #7C98A9;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .nav-btn span:first-child {
+            font-size: 1.4rem;
+            font-weight: 400;
+        }
+        .nav-btn.active {
+            color: #197786;
+            background: #EAF3F7;
+        }
+        .nav-btn.active span:first-child {
+            transform: scale(1.02);
+        }
+        .nav-btn:active {
+            transform: scale(0.94);
+        }
+        .safe-bottom {
+            height: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile-app">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span style="display: flex; gap: 4px;">📶 🔋 100%</span>
+    </div>
+
+    <div class="app-content">
+        <div class="filter-row">
+            <div class="year-pill">
+                <span class="year-label">📅 Action Plan</span>
+                <select id="yearFilterNSSS" class="year-select">
+                    <option value="2023">FY 2023–24</option>
+                    <option value="2024" selected>FY 2024–25</option>
+                    <option value="2025">FY 2025–26</option>
+                    <option value="2026">FY 2026–27</option>
+                </select>
+            </div>
+            <div class="right-filters">
+                <div class="year-pill">
+                    <span class="year-label">Filter</span>
+                    <select id="groupFilterNSSS" class="year-select">
+                        <option value="ministry" selected>Ministry/Division</option>
+                        <option value="thematic">Thematic Cluster</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-title">TOTAL PLANS</div>
+                <div class="stat-number" id="totalPlans">--</div>
+                <div class="stat-sub">action plans</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-title">COMPLETED</div>
+                <div class="stat-number" id="completedPlans">--</div>
+                <div class="stat-sub">fully done</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔄</div>
+                <div class="stat-title">IN PROGRESS</div>
+                <div class="stat-number" id="inProgressPlans">--</div>
+                <div class="stat-sub">ongoing</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔁</div>
+                <div class="stat-title">CONTINUOUS</div>
+                <div class="stat-number" id="continuousPlans">--</div>
+                <div class="stat-sub">recurring</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-title">PARTIALLY COMPLETED</div>
+                <div class="stat-number" id="partiallyCompletedPlans">--</div>
+                <div class="stat-sub">partial</div>
+            </div>
+        </div>
+
+        <div class="context-message" id="contextMsgNSSS">
+            <div class="msg-emoji">📘</div>
+            <div class="msg-text" id="dynamicMsgText">NSSS Action Plan · FY 2024–25 summary</div>
+        </div>
+    </div>
+
+    <div class="bottom-dock">
+        <button class="nav-btn" data-mobile-nav="home">
+            <span>🏠</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="nsss">
+            <span>📘</span>
+            <span>NSSS Plan</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="lifecycle">
+            <span>🔄</span>
+            <span>Life Cycle</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="faq">
+            <span>❓</span>
+            <span>FAQ</span>
+        </button>
+    </div>
+    <div class="safe-bottom"></div>
+</div>
+
+<script>
+    const nsssData = {
+        ministry: {
+            2023: { total: 150, completed: 45, inProgress: 60, continuous: 25, partially: 20 },
+            2024: { total: 165, completed: 55, inProgress: 65, continuous: 30, partially: 15 },
+            2025: { total: 180, completed: 65, inProgress: 70, continuous: 35, partially: 10 },
+            2026: { total: 195, completed: 75, inProgress: 75, continuous: 40, partially: 5 }
+        },
+        thematic: {
+            2023: { total: 85, completed: 25, inProgress: 35, continuous: 15, partially: 10 },
+            2024: { total: 95, completed: 30, inProgress: 40, continuous: 18, partially: 7 },
+            2025: { total: 105, completed: 35, inProgress: 45, continuous: 20, partially: 5 },
+            2026: { total: 115, completed: 40, inProgress: 50, continuous: 22, partially: 3 }
+        }
+    };
+
+    function updateNSSSStats(year, group) {
+        const data = nsssData[group][year];
+        if (!data) return;
+
+        document.getElementById('totalPlans').innerText = data.total.toLocaleString('en-IN');
+        document.getElementById('completedPlans').innerText = data.completed.toLocaleString('en-IN');
+        document.getElementById('inProgressPlans').innerText = data.inProgress.toLocaleString('en-IN');
+        document.getElementById('continuousPlans').innerText = data.continuous.toLocaleString('en-IN');
+        document.getElementById('partiallyCompletedPlans').innerText = data.partially.toLocaleString('en-IN');
+
+        const nextYear = year + 1;
+        const emoji = '📘';
+        const message = `NSSS Action Plan · FY ${year}–${nextYear} summary (${group === 'ministry' ? 'by Ministry/Division' : 'by Thematic Cluster'}).`;
+        document.getElementById('dynamicMsgText').innerText = message;
+        const emojiSpan = document.querySelector('.context-message .msg-emoji');
+        if (emojiSpan) emojiSpan.innerText = emoji;
+    }
+
+    function setActiveBottomNav(tabId) {
+        const allBtns = document.querySelectorAll('.nav-btn');
+        allBtns.forEach(btn => {
+            const btnVal = btn.getAttribute('data-mobile-nav');
+            if (btnVal === tabId) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    function attachBottomNav() {
+        const btns = document.querySelectorAll('.nav-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const navValue = btn.getAttribute('data-mobile-nav');
+                if (navValue === 'home') {
+                    window.location.href = 'home.html';
+                    return;
+                } else if (navValue === 'lifecycle') {
+                    window.location.href = 'life cycle.html';
+                    return;
+                } else if (navValue === 'faq') {
+                    window.location.href = 'faq.html';
+                    return;
+                }
+                setActiveBottomNav(navValue);
+                const year = parseInt(document.getElementById('yearFilterNSSS').value, 10);
+                const group = document.getElementById('groupFilterNSSS').value;
+                updateContextMessage(navValue, year, group);
+                btn.style.transform = 'scale(0.96)';
+                setTimeout(() => { btn.style.transform = ''; }, 120);
+            });
+        });
+    }
+
+    function updateContextMessage(tabId, year, group) {
+        const nextYear = year + 1;
+        let emoji = '📘';
+        let message = `NSSS Action Plan · FY ${year}–${nextYear} (${group === 'ministry' ? 'Ministry/Division' : 'Thematic Cluster'}).`;
+        switch (tabId) {
+            case 'home':
+                emoji = '🏠';
+                message = `Home · NSSS Action Plan overview for FY ${year}–${nextYear}.`;
+                break;
+            case 'nsss':
+                emoji = '📘';
+                message = `NSSS Action Plan · Detailed stats for FY ${year}–${nextYear} (${group === 'ministry' ? 'by Ministry/Division' : 'by Thematic Cluster'}).`;
+                break;
+            case 'lifecycle':
+                emoji = '🔄';
+                message = `Life Cycle · NSSS plans integrated across lifecycle for FY ${year}–${nextYear}.`;
+                break;
+            case 'faq':
+                emoji = '❓';
+                message = `FAQ · NSSS Action Plan details and implementation for FY ${year}–${nextYear}.`;
+                break;
+        }
+        document.getElementById('dynamicMsgText').innerText = message;
+        const emojiSpan = document.querySelector('.context-message .msg-emoji');
+        if (emojiSpan) emojiSpan.innerText = emoji;
+    }
+
+    function initNSSSPage() {
+        const yearSelect = document.getElementById('yearFilterNSSS');
+        const groupSelect = document.getElementById('groupFilterNSSS');
+        const selectedYear = parseInt(yearSelect.value, 10);
+        const selectedGroup = groupSelect.value;
+        updateNSSSStats(selectedYear, selectedGroup);
+        attachBottomNav();
+        setActiveBottomNav('nsss');
+
+        yearSelect.addEventListener('change', () => {
+            const year = parseInt(yearSelect.value, 10);
+            const group = groupSelect.value;
+            updateNSSSStats(year, group);
+            setActiveBottomNav('nsss');
+        });
+
+        groupSelect.addEventListener('change', () => {
+            const year = parseInt(yearSelect.value, 10);
+            const group = groupSelect.value;
+            updateNSSSStats(year, group);
+            setActiveBottomNav('nsss');
+        });
+
+        const nsssBtn = document.querySelector('.nav-btn[data-mobile-nav="nsss"]');
+        if (nsssBtn) nsssBtn.setAttribute('title', 'NSSS Action Plan - full framework');
+    }
+
+    initNSSSPage();
+</script>
+</body>
+</html>

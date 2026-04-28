@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>NSSS Portal — FAQ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background: #F2F5F9;
+            font-family: -apple-system, 'Inter', system-ui, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 12px;
+        }
+        .mobile-app {
+            max-width: 380px;
+            width: 100%;
+            height: 700px;
+            background: #FFFFFF;
+            border-radius: 44px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 8px #E8ECF0, 0 0 0 12px #D0D6DD;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .status-bar {
+            background: #FFFFFF;
+            padding: 14px 24px 6px 24px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 590;
+            color: #1C2E3A;
+            border-bottom: 0.5px solid #EEF2F8;
+        }
+        .app-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 20px 12px 20px;
+            scroll-behavior: smooth;
+        }
+        .app-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .app-content::-webkit-scrollbar-track {
+            background: #F0F2F6;
+            border-radius: 10px;
+        }
+        .app-content::-webkit-scrollbar-thumb {
+            background: #C0CCD6;
+            border-radius: 10px;
+        }
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0A3D4F;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #E6EDF3;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            background: #FAFBFC;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus {
+            border-color: #2C9BB3;
+        }
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .faq-item {
+            background: #FAFBFC;
+            border-radius: 16px;
+            border: 1px solid #E6EDF3;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .faq-item.expanded {
+            background: #F0F7FA;
+            border-color: #C0E0E8;
+        }
+        .faq-question {
+            padding: 16px;
+            font-weight: 600;
+            color: #1C2E3A;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        .faq-question:hover {
+            background: rgba(44, 155, 179, 0.05);
+        }
+        .faq-toggle {
+            font-size: 1.2rem;
+            color: #7C98A9;
+            transition: transform 0.2s;
+        }
+        .faq-item.expanded .faq-toggle {
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            padding: 0 16px 16px 16px;
+            color: #3E6B7E;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            display: none;
+        }
+        .faq-item.expanded .faq-answer {
+            display: block;
+        }
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7C98A9;
+            font-size: 0.9rem;
+        }
+        .context-message {
+            background: #EFF7FA;
+            border-radius: 24px;
+            padding: 12px 16px;
+            margin: 12px 0 20px 0;
+            font-size: 0.75rem;
+            color: #1C6B82;
+            border-left: 3px solid #2C9BB3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(2px);
+        }
+        .msg-emoji {
+            font-size: 1.2rem;
+        }
+        .msg-text {
+            flex: 1;
+            font-weight: 470;
+            line-height: 1.35;
+        }
+        .bottom-dock {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            border-top: 0.5px solid #EFF3F8;
+            padding: 10px 16px 20px 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.02);
+        }
+        .nav-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0 4px;
+            border-radius: 32px;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 0.7rem;
+            color: #7C98A9;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .nav-btn span:first-child {
+            font-size: 1.4rem;
+            font-weight: 400;
+        }
+        .nav-btn.active {
+            color: #197786;
+            background: #EAF3F7;
+        }
+        .nav-btn.active span:first-child {
+            transform: scale(1.02);
+        }
+        .nav-btn:active {
+            transform: scale(0.94);
+        }
+        .safe-bottom {
+            height: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile-app">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span style="display: flex; gap: 4px;">📶 🔋 100%</span>
+    </div>
+
+    <div class="app-content">
+        <div class="section-title">
+            ❓ Frequently Asked Questions
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search questions...">
+        </div>
+
+        <div class="faq-list" id="faqList"></div>
+
+        <div class="context-message" id="contextMsgFaq">
+            <div class="msg-emoji">❓</div>
+            <div class="msg-text" id="dynamicMsgText">FAQ · Common questions about NSSS programmes and eligibility</div>
+        </div>
+    </div>
+
+    <div class="bottom-dock">
+        <button class="nav-btn" data-mobile-nav="home">
+            <span>🏠</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="nsss">
+            <span>📘</span>
+            <span>NSSS Plan</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="lifecycle">
+            <span>🔄</span>
+            <span>Life Cycle</span>
+        </button>
+        <button class="nav-btn" data-mobile-nav="faq">
+            <span>❓</span>
+            <span>FAQ</span>
+        </button>
+    </div>
+    <div class="safe-bottom"></div>
+</div>
+
+<script>
+    const faqData = [
+        {
+            question: "How do I register for NSSS programmes?",
+            answer: "You can register through your local Union Digital Center or visit the NSSS portal at nsss.gov.bd. Bring your NID, income certificate, and relevant documents. Registration is free and takes about 15-20 minutes."
+        },
+        {
+            question: "What are the eligibility criteria for Old Age Allowance?",
+            answer: "Citizens aged 65+ with monthly income below ৳3,000 are eligible. Must be a Bangladeshi national and not receiving other government pensions. Applications are processed quarterly."
+        },
+        {
+            question: "How is the Maternity Allowance distributed?",
+            answer: "Pregnant women receive ৳2,000 in two installments: ৳1,000 at 4-6 months and ৳1,000 at 7-9 months. Payment is made through mobile banking or bank accounts within 7 days of approval."
+        },
+        {
+            question: "What documents are needed for Disability Allowance?",
+            answer: "Required: NID, disability certificate from government hospital, income certificate, and medical reports. Disability must be certified by a registered medical practitioner."
+        },
+        {
+            question: "How often are allowances paid?",
+            answer: "Most allowances are paid quarterly (every 3 months). Some programmes like VGD provide monthly support. Payments are credited directly to beneficiary accounts or mobile wallets."
+        },
+        {
+            question: "Can I apply for multiple programmes simultaneously?",
+            answer: "Yes, if you meet eligibility criteria for different programmes. However, income limits and family size restrictions may apply. The system automatically checks for overlaps during application."
+        },
+        {
+            question: "What if my application is rejected?",
+            answer: "Rejections are communicated via SMS with reasons. You can appeal within 30 days by visiting your Union Digital Center with additional documents. Most appeals are resolved within 15 days."
+        },
+        {
+            question: "How do I update my beneficiary information?",
+            answer: "Contact your local NSSS office or Union Digital Center. Bring updated NID, address proof, and income documents. Changes are processed within 7-10 working days."
+        },
+        {
+            question: "Are there any fees for NSSS services?",
+            answer: "All NSSS services are completely free. No application fees, processing charges, or hidden costs. Government bears all administrative expenses."
+        },
+        {
+            question: "What is the grievance redressal process?",
+            answer: "File complaints through the NSSS helpline (16200), portal, or local office. All grievances are acknowledged within 24 hours and resolved within 7-15 days depending on complexity."
+        },
+        {
+            question: "How are beneficiaries selected?",
+            answer: "Selection follows NSSS guidelines using poverty score (BDHS data), income verification, and family size assessment. Transparent lottery system used when demand exceeds supply."
+        },
+        {
+            question: "Can foreigners apply for NSSS programmes?",
+            answer: "No, programmes are exclusively for Bangladeshi citizens. Refugees and stateless persons should contact UNHCR or relevant ministries for alternative support."
+        }
+    ];
+
+    function renderFAQ(filteredData = faqData) {
+        const faqList = document.getElementById('faqList');
+        faqList.innerHTML = '';
+
+        if (filteredData.length === 0) {
+            faqList.innerHTML = '<div class="no-results">No questions found matching your search.</div>';
+            return;
+        }
+
+        filteredData.forEach((item, index) => {
+            const faqItem = document.createElement('div');
+            faqItem.className = 'faq-item';
+            faqItem.innerHTML = `
+                <div class="faq-question" onclick="toggleFAQ(${index})">
+                    <span>${item.question}</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">${item.answer}</div>
+            `;
+            faqList.appendChild(faqItem);
+        });
+    }
+
+    function toggleFAQ(index) {
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach((item, i) => {
+            if (i === index) {
+                item.classList.toggle('expanded');
+            } else {
+                item.classList.remove('expanded');
+            }
+        });
+    }
+
+    function filterFAQ(searchTerm) {
+        const filtered = faqData.filter(item =>
+            item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.answer.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        renderFAQ(filtered);
+    }
+
+    function setActiveBottomNav(tabId) {
+        const allBtns = document.querySelectorAll('.nav-btn');
+        allBtns.forEach(btn => {
+            const btnVal = btn.getAttribute('data-mobile-nav');
+            if (btnVal === tabId) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    function attachBottomNav() {
+        const btns = document.querySelectorAll('.nav-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const navValue = btn.getAttribute('data-mobile-nav');
+                if (navValue === 'home') {
+                    window.location.href = 'home.html';
+                    return;
+                } else if (navValue === 'nsss') {
+                    window.location.href = 'nsss plan.html';
+                    return;
+                } else if (navValue === 'lifecycle') {
+                    window.location.href = 'life cycle.html';
+                    return;
+                } else if (navValue === 'faq') {
+                    // stay on page
+                }
+                setActiveBottomNav(navValue);
+                btn.style.transform = 'scale(0.96)';
+                setTimeout(() => { btn.style.transform = ''; }, 120);
+            });
+        });
+    }
+
+    function initFAQPage() {
+        renderFAQ();
+        attachBottomNav();
+        setActiveBottomNav('faq');
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            filterFAQ(e.target.value);
+        });
+    }
+
+    initFAQPage();
+</script>
+</body>
+</html>
