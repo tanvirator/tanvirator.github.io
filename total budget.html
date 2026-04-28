@@ -164,7 +164,7 @@
             width: 17.5%;
             text-align: right;
             font-weight: 600;
-            color: #6E8C9E;
+            color: #FFFFFF;
         }
 
         /* info toast / contextual message */
@@ -223,8 +223,8 @@
             font-weight: 400;
         }
         .nav-btn.active {
-            color: #197786;
-            background: #EAF3F7;
+            color: #FFFFFF;
+            background: #FFFFFF;
         }
         .nav-btn.active span:first-child {
             transform: scale(1.02);
@@ -259,8 +259,8 @@
                 <span class="year-label">📅 Fiscal Year</span>
                 <select id="yearFilterBudget" class="year-select">
                     <option value="2023">FY 2023–24</option>
-                    <option value="2024" selected>FY 2024–25</option>
-                    <option value="2025">FY 2025–26</option>
+                    <option value="2024">FY 2024–25</option>
+                    <option value="2025" selected>FY 2025–26</option>
                     <option value="2026">FY 2026–27</option>
                 </select>
             </div>
@@ -422,7 +422,7 @@
     // attach navigation event listeners
     function attachNavForBudgetScreen() {
         const btns = document.querySelectorAll('.nav-btn');
-        const getCurrentYear = () => document.getElementById('yearFilterBudget')?.value || '2024';
+        const getCurrentYear = () => document.getElementById('yearFilterBudget')?.value || '2025';
         btns.forEach(btn => {
             btn.removeEventListener('click', (btn._listenerBudgetNav));
             const handler = function(e) {
@@ -510,4 +510,8 @@
 </script>
 </body>
 </html>
+
+
+
+
 

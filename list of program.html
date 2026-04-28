@@ -267,8 +267,8 @@
             font-weight: 400;
         }
         .nav-btn.active {
-            color: #197786;
-            background: #EAF3F7;
+            color: #FFFFFF;
+            background: #FFFFFF;
         }
         .nav-btn.active span:first-child {
             transform: scale(1.02);
@@ -295,8 +295,8 @@
                 <span class="year-label">📅 Fiscal Year</span>
                 <select id="yearFilterList" class="year-select">
                     <option value="2023">FY 2023–24</option>
-                    <option value="2024" selected>FY 2024–25</option>
-                    <option value="2025">FY 2025–26</option>
+                    <option value="2024">FY 2024–25</option>
+                    <option value="2025" selected>FY 2025–26</option>
                     <option value="2026">FY 2026–27</option>
                 </select>
             </div>
@@ -443,7 +443,7 @@
     // ----- Bottom navigation state & contextual message (same as first screen logic)-----
     let currentActiveNav = 'home';   // home, nsss, lifecycle, faq, but on this screen default "home" shows programme list context
     const yearSelectElem = document.getElementById('yearFilterList');
-    let currentYear = '2024';
+    let currentYear = '2025';
     
     function updateContextMessageForActiveTab(tabId, year) {
         const msgDiv = document.getElementById('dynamicMsgText2');
@@ -496,7 +496,7 @@
     // attach navigation event listeners
     function attachNavForListScreen() {
         const btns = document.querySelectorAll('.nav-btn');
-        const getCurrentYear = () => document.getElementById('yearFilterList')?.value || '2024';
+        const getCurrentYear = () => document.getElementById('yearFilterList')?.value || '2025';
         btns.forEach(btn => {
             btn.removeEventListener('click', (btn._listenerListNav));
             const handler = function(e) {
@@ -545,7 +545,7 @@
         attachNavForListScreen();
         
         // additional hover: ensure bottom nav matches style, also make footer consistent
-        const currentYearForMsg = yearSelectElem?.value || '2024';
+        const currentYearForMsg = yearSelectElem?.value || '2025';
         updateContextMessageForActiveTab('home', currentYearForMsg);
         
         // provide a tooltip simulation
@@ -572,4 +572,8 @@
 </script>
 </body>
 </html>
+
+
+
+
 
