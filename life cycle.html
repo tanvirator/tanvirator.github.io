@@ -376,16 +376,19 @@
             btn.addEventListener('click', () => {
                 const navValue = btn.getAttribute('data-mobile-nav');
                 if (navValue === 'home') {
-                    window.location.href = '../index.html';
+                    window.location.href = 'index.html';
                     return;
                 } else if (navValue === 'nsss') {
                     window.location.href = 'nsss plan.html';
                     return;
                 } else if (navValue === 'lifecycle') {
                     // stay on page
-                } else {
-                    setActiveBottomNav(navValue);
+                    return;
+                } else if (navValue === 'faq') {
+                    window.location.href = 'faq.html';
+                    return;
                 }
+                setActiveBottomNav(navValue);
                 btn.style.transform = 'scale(0.96)';
                 setTimeout(() => { btn.style.transform = ''; }, 120);
             });
@@ -405,3 +408,4 @@
 </script>
 </body>
 </html>
+
